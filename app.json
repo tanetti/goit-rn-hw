@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "goit-rn-hw-01",
-    "slug": "goit-rn-hw-01",
+    "name": "goit-rn-hw",
+    "slug": "goit-rn-hw",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,9 +14,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
