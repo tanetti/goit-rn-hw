@@ -1,4 +1,10 @@
 import { StyleSheet } from 'react-native';
+import {
+  interpolateEmailBackgroundColor,
+  interpolateEmailBorderColor,
+  interpolatePasswordBackgroundColor,
+  interpolatePasswordBorderColor,
+} from './animations';
 
 export const styles = StyleSheet.create({
   backgroundImage: {
@@ -33,21 +39,75 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  formInput: {
-    height: 50,
+  emailInputContainer: {
     marginBottom: 16,
-    padding: 16,
+
+    backgroundColor: interpolateEmailBackgroundColor,
+
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: interpolateEmailBorderColor,
+    borderRadius: 8,
+  },
+
+  passwordInputContainer: {
+    position: 'relative',
+
+    marginBottom: 16,
+
+    backgroundColor: interpolatePasswordBackgroundColor,
+
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: interpolatePasswordBorderColor,
+    borderRadius: 8,
+  },
+
+  passwordTypeSwitch: {
+    position: 'absolute',
+    top: 0,
+    right: 16,
+
+    display: 'flex',
+    justifyContent: 'center',
+
+    height: '100%',
+  },
+
+  passwordTypeSwitchText: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 16,
+    lineHeight: 19,
+
+    color: '#1b4371',
+  },
+
+  emailInput: {
+    display: 'flex',
+    justifyContent: 'center',
+
+    height: 50,
+    paddingHorizontal: 16,
 
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
     lineHeight: 19,
 
     color: '#212121',
-    backgroundColor: '#f6f6f6',
+  },
 
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#e8e8e8',
-    borderRadius: 8,
+  passwordInput: {
+    display: 'flex',
+    justifyContent: 'center',
+
+    height: 50,
+    paddingLeft: 16,
+    paddingRight: 70,
+
+    fontFamily: 'Roboto-Regular',
+    fontSize: 16,
+    lineHeight: 19,
+
+    color: '#212121',
   },
 });

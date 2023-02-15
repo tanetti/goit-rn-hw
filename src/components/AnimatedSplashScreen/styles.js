@@ -5,7 +5,7 @@ const animation = new Animated.Value(1);
 
 export const splashAnimation = Animated.timing(animation, {
   toValue: 0,
-  duration: 800,
+  duration: 500,
   useNativeDriver: true,
 });
 
