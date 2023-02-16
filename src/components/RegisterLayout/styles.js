@@ -1,5 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import {
+  interpolateNameBackgroundColor,
+  interpolateNameBorderColor,
   interpolateEmailBackgroundColor,
   interpolateEmailBorderColor,
   interpolatePasswordBackgroundColor,
@@ -26,7 +28,9 @@ export const styles = StyleSheet.create({
   },
 
   formContainer: {
-    paddingTop: 32,
+    position: 'relative',
+
+    paddingTop: 92,
     paddingLeft: 16,
     paddingRight: 16,
 
@@ -50,6 +54,17 @@ export const styles = StyleSheet.create({
 
   fieldsContainer: {
     marginBottom: 32,
+  },
+
+  nameInputContainer: {
+    marginBottom: 16,
+
+    backgroundColor: interpolateNameBackgroundColor,
+
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: interpolateNameBorderColor,
+    borderRadius: 8,
   },
 
   emailInputContainer: {
@@ -84,6 +99,20 @@ export const styles = StyleSheet.create({
 
     height: '100%',
     paddingHorizontal: 16,
+  },
+
+  nameInput: {
+    display: 'flex',
+    justifyContent: 'center',
+
+    height: 50,
+    paddingHorizontal: 16,
+
+    fontFamily: 'Roboto-Regular',
+    fontSize: 16,
+    lineHeight: 19,
+
+    color: '#212121',
   },
 
   emailInput: {
@@ -124,7 +153,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 103,
   },
 
-  loginButton: {
+  registerButton: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -138,7 +167,7 @@ export const styles = StyleSheet.create({
     borderRadius: 100,
   },
 
-  loginButtonText: {
+  registerButtonText: {
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
     lineHeight: 19,
@@ -146,11 +175,11 @@ export const styles = StyleSheet.create({
     color: '#fff',
   },
 
-  registerButton: {
+  loginButton: {
     padding: 8,
   },
 
-  registerButtonText: {
+  loginButtonText: {
     color: '#1b4371',
   },
 });

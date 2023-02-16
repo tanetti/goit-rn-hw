@@ -1,7 +1,7 @@
 import { SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants';
-import { LoginScreen } from '~/screens/LoginScreen';
+import { RegisterScreen } from '~/screens/RegisterScreen';
 
 export const Root = () => (
   <SafeAreaView
@@ -12,6 +12,6 @@ export const Root = () => (
   >
     <StatusBar style="auto" />
 
-    <LoginScreen />
+    <RegisterScreen />
   </SafeAreaView>
 );

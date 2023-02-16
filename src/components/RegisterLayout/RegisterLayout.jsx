@@ -15,6 +15,8 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {
+  nameForwardAnimation,
+  nameBackwardAnimation,
   emailForwardAnimation,
   emailBackwardAnimation,
   passwordForwardAnimation,
@@ -22,15 +24,23 @@ import {
 } from './animations';
 import background from '~/assets/images/background.png';
 import { styles } from './styles';
+import { RegisterImagePicker } from './components';
 
-const loginFormInitialValue = { email: '', password: '' };
+const registerFormInitialValue = {
+  name: '',
+  email: '',
+  password: '',
+};
 
-export const LoginLayout = () => {
+export const RegisterLayout = () => {
+  const nameField = useRef(null);
   const emailField = useRef(null);
   const passwordField = useRef(null);
-  const [loginFormState, setLoginFormState] = useState(
-    () => loginFormInitialValue
+  const [imageUri, setImageUri] = useState(null);
+  const [registerFormState, setRegisterFormState] = useState(
+    () => registerFormInitialValue
   );
+  const [isNameFocused, setIsNameFocused] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isPasswordHide, setIsPasswordHide] = useState(true);
@@ -38,11 +48,20 @@ export const LoginLayout = () => {
 
   const onFormBlur = useCallback(() => {
     Keyboard.dismiss();
+    nameField.current.blur();
     emailField.current.blur();
     passwordField.current.blur();
   }, []);
 
-  const onFormSubmit = () => console.log(loginFormState);
+  const onFormSubmit = () => {
+    const registerData = { ...registerFormState, image: imageUri };
+
+    console.log(registerData);
+  };
+
+  const onNameSubmit = () => {
+    setTimeout(() => emailField.current.focus(), 100);
+  };
 
   const onEmailSubmit = () => {
     setTimeout(() => passwordField.current.focus(), 100);
@@ -53,7 +72,17 @@ export const LoginLayout = () => {
     onFormSubmit();
   };
 
-  const onRegisterPress = () => console.log('Routing to Register screen');
+  const onLoginPress = () => console.log('Routing to Login screen');
+
+  const onNameFocus = () => {
+    nameForwardAnimation.start();
+    setIsNameFocused(true);
+  };
+
+  const onNameBlur = () => {
+    nameBackwardAnimation.start();
+    setIsNameFocused(false);
+  };
 
   const onEmailFocus = () => {
     emailForwardAnimation.start();
@@ -96,14 +125,37 @@ export const LoginLayout = () => {
       <View style={styles.layoutContainer}>
         <ImageBackground source={background} style={styles.backgroundImage} />
         <View style={styles.formContainer} pointerEvents="box-none">
+          <RegisterImagePicker imageUri={imageUri} setImageUri={setImageUri} />
+
           <View pointerEvents="none">
-            <Text style={styles.formTitle}>Login</Text>
+            <Text style={styles.formTitle}>Registration</Text>
           </View>
 
           <KeyboardAvoidingView
             style={styles.fieldsContainer}
             behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
           >
+            <Animated.View style={styles.nameInputContainer}>
+              <TextInput
+                ref={nameField}
+                placeholder={isNameFocused ? null : 'Name'}
+                placeholderTextColor="#bdbdbd"
+                cursorColor="#bdbdbd"
+                selectionColor="#e6e6e6"
+                autoCapitalize="words"
+                autoComplete="name"
+                returnKeyType="next"
+                style={styles.nameInput}
+                value={registerFormState.name}
+                onChangeText={name =>
+                  setRegisterFormState(prevState => ({ ...prevState, name }))
+                }
+                onFocus={onNameFocus}
+                onBlur={onNameBlur}
+                onSubmitEditing={onNameSubmit}
+              />
+            </Animated.View>
+
             <Animated.View style={styles.emailInputContainer}>
               <TextInput
                 ref={emailField}
@@ -116,9 +168,9 @@ export const LoginLayout = () => {
                 autoComplete="email"
                 returnKeyType="next"
                 style={styles.emailInput}
-                value={loginFormState.email}
+                value={registerFormState.email}
                 onChangeText={email =>
-                  setLoginFormState(prevState => ({ ...prevState, email }))
+                  setRegisterFormState(prevState => ({ ...prevState, email }))
                 }
                 onFocus={onEmailFocus}
                 onBlur={onEmailBlur}
@@ -141,9 +193,12 @@ export const LoginLayout = () => {
                 autoCapitalize="none"
                 returnKeyType="go"
                 style={styles.passwordInput}
-                value={loginFormState.password}
+                value={registerFormState.password}
                 onChangeText={password =>
-                  setLoginFormState(prevState => ({ ...prevState, password }))
+                  setRegisterFormState(prevState => ({
+                    ...prevState,
+                    password,
+                  }))
                 }
                 onFocus={onPasswordFocus}
                 onBlur={onPasswordBlur}
@@ -171,22 +226,22 @@ export const LoginLayout = () => {
           {!isKeyboardShown && (
             <View style={styles.controlsContainer}>
               <TouchableOpacity
-                style={styles.loginButton}
+                style={styles.registerButton}
                 activeOpacity={0.7}
                 onPress={onFormSubmit}
               >
                 <View pointerEvents="none">
-                  <Text style={styles.loginButtonText}>Login</Text>
+                  <Text style={styles.registerButtonText}>Registration</Text>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.registerButton}
+                style={styles.loginButton}
                 activeOpacity={0.6}
-                onPress={onRegisterPress}
+                onPress={onLoginPress}
               >
-                <Text style={styles.registerButtonText}>
-                  Register, if you haven`t yet.
+                <Text style={styles.loginButtonText}>
+                  Login, if you already registered.
                 </Text>
               </TouchableOpacity>
             </View>
