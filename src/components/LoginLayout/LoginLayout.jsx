@@ -37,6 +37,7 @@ export const LoginLayout = () => {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
 
   const onFormBlur = useCallback(() => {
+    Keyboard.dismiss();
     emailField.current.blur();
     passwordField.current.blur();
   }, []);
@@ -92,7 +93,8 @@ export const LoginLayout = () => {
 
   return (
     <TouchableWithoutFeedback onPress={onFormBlur}>
-      <ImageBackground source={background} style={styles.backgroundImage}>
+      <View style={styles.layoutContainer}>
+        <ImageBackground source={background} style={styles.backgroundImage} />
         <View style={styles.formContainer} pointerEvents="box-none">
           <View pointerEvents="none">
             <Text style={styles.formTitle}>Login</Text>
@@ -190,7 +192,7 @@ export const LoginLayout = () => {
             </View>
           )}
         </View>
-      </ImageBackground>
+      </View>
     </TouchableWithoutFeedback>
   );
 };

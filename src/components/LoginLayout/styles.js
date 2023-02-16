@@ -1,15 +1,27 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import {
   interpolateEmailBackgroundColor,
   interpolateEmailBorderColor,
   interpolatePasswordBackgroundColor,
   interpolatePasswordBorderColor,
+  interpolateControlsHeight,
 } from './animations';
 
 export const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
+  layoutContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
     justifyContent: 'flex-end',
+  },
+
+  backgroundImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
 
     resizeMode: 'cover',
   },
