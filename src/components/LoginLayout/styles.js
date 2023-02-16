@@ -15,11 +15,9 @@ export const styles = StyleSheet.create({
   },
 
   formContainer: {
-    width: '100%',
     paddingTop: 32,
     paddingLeft: 16,
     paddingRight: 16,
-    paddingBottom: 100,
 
     backgroundColor: '#fff',
 
@@ -39,6 +37,10 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  fieldsContainer: {
+    marginBottom: 32,
+  },
+
   emailInputContainer: {
     marginBottom: 16,
 
@@ -53,8 +55,6 @@ export const styles = StyleSheet.create({
   passwordInputContainer: {
     position: 'relative',
 
-    marginBottom: 16,
-
     backgroundColor: interpolatePasswordBackgroundColor,
 
     borderWidth: 1,
@@ -66,20 +66,13 @@ export const styles = StyleSheet.create({
   passwordTypeSwitch: {
     position: 'absolute',
     top: 0,
-    right: 16,
+    right: 0,
 
     display: 'flex',
     justifyContent: 'center',
 
     height: '100%',
-  },
-
-  passwordTypeSwitchText: {
-    fontFamily: 'Roboto-Regular',
-    fontSize: 16,
-    lineHeight: 19,
-
-    color: '#1b4371',
+    paddingHorizontal: 16,
   },
 
   emailInput: {
@@ -109,5 +102,44 @@ export const styles = StyleSheet.create({
     lineHeight: 19,
 
     color: '#212121',
+  },
+
+  controlsContainer: {
+    display: 'flex',
+    alignItems: 'center',
+
+    width: '100%',
+    paddingTop: 11,
+    paddingBottom: 103,
+  },
+
+  loginButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    width: '100%',
+    height: 51,
+    marginBottom: 8,
+
+    backgroundColor: '#ff6c00',
+
+    borderRadius: 100,
+  },
+
+  loginButtonText: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 16,
+    lineHeight: 19,
+
+    color: '#fff',
+  },
+
+  registerButton: {
+    padding: 8,
+  },
+
+  registerButtonText: {
+    color: '#1b4371',
   },
 });

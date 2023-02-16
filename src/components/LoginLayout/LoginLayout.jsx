@@ -1,4 +1,7 @@
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 import {
   Platform,
   Animated,
@@ -7,6 +10,9 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {
   emailForwardAnimation,
@@ -20,6 +26,7 @@ import { styles } from './styles';
 const loginFormInitialValue = { email: '', password: '' };
 
 export const LoginLayout = () => {
+  const emailField = useRef(null);
   const passwordField = useRef(null);
   const [loginFormState, setLoginFormState] = useState(
     () => loginFormInitialValue
@@ -27,10 +34,25 @@ export const LoginLayout = () => {
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isPasswordHide, setIsPasswordHide] = useState(true);
+  const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+
+  const onFormBlur = useCallback(() => {
+    emailField.current.blur();
+    passwordField.current.blur();
+  }, []);
+
+  const onFormSubmit = () => console.log(loginFormState);
 
   const onEmailSubmit = () => {
     setTimeout(() => passwordField.current.focus(), 100);
   };
+
+  const onPasswordSubmit = () => {
+    onFormBlur();
+    onFormSubmit();
+  };
+
+  const onRegisterPress = () => console.log('Routing to Register screen');
 
   const onEmailFocus = () => {
     emailForwardAnimation.start();
@@ -52,65 +74,123 @@ export const LoginLayout = () => {
     setIsPasswordFocused(false);
   };
 
+  useEffect(() => {
+    const keyboardShowListener = Keyboard.addListener('keyboardDidShow', () =>
+      setIsKeyboardShown(true)
+    );
+
+    const keyboardHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      onFormBlur();
+      setIsKeyboardShown(false);
+    });
+
+    return () => {
+      keyboardShowListener.remove();
+      keyboardHideListener.remove();
+    };
+  }, []);
+
   return (
-    <ImageBackground source={background} style={styles.backgroundImage}>
-      <View style={styles.formContainer}>
-        <Text style={styles.formTitle}>Login</Text>
+    <TouchableWithoutFeedback onPress={onFormBlur}>
+      <ImageBackground source={background} style={styles.backgroundImage}>
+        <View style={styles.formContainer} pointerEvents="box-none">
+          <View pointerEvents="none">
+            <Text style={styles.formTitle}>Login</Text>
+          </View>
 
-        <Animated.View style={styles.emailInputContainer}>
-          <TextInput
-            placeholder={isEmailFocused ? null : 'Email address'}
-            placeholderTextColor="#bdbdbd"
-            keyboardType="email-address"
-            cursorColor="#bdbdbd"
-            selectionColor="#e6e6e6"
-            autoCapitalize="none"
-            autoComplete="email"
-            returnKeyType="next"
-            style={styles.emailInput}
-            value={loginFormState.email}
-            onChangeText={email =>
-              setLoginFormState(prevState => ({ ...prevState, email }))
-            }
-            onFocus={onEmailFocus}
-            onBlur={onEmailBlur}
-            onSubmitEditing={onEmailSubmit}
-          />
-        </Animated.View>
-
-        <Animated.View style={styles.passwordInputContainer}>
-          <TextInput
-            ref={passwordField}
-            placeholder={isPasswordFocused ? null : 'Password'}
-            placeholderTextColor="#bdbdbd"
-            secureTextEntry={isPasswordHide}
-            keyboardType={Platform.select({
-              android: isPasswordHide ? 'default' : 'visible-password',
-              ios: isPasswordHide ? 'default' : 'ascii-capable',
-            })}
-            cursorColor="#bdbdbd"
-            selectionColor="#e6e6e6"
-            autoCapitalize="none"
-            returnKeyType="go"
-            style={styles.passwordInput}
-            value={loginFormState.password}
-            onChangeText={password =>
-              setLoginFormState(prevState => ({ ...prevState, password }))
-            }
-            onFocus={onPasswordFocus}
-            onBlur={onPasswordBlur}
-          />
-
-          <TouchableOpacity
-            style={styles.passwordTypeSwitch}
-            onPress={() => setIsPasswordHide(prevState => !prevState)}
+          <KeyboardAvoidingView
+            style={styles.fieldsContainer}
+            behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
           >
-            <Text style={styles.passwordTypeSwitchText}>
-              {isPasswordHide ? 'Show' : 'Hide'}
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
-    </ImageBackground>
+            <Animated.View style={styles.emailInputContainer}>
+              <TextInput
+                ref={emailField}
+                placeholder={isEmailFocused ? null : 'Email address'}
+                placeholderTextColor="#bdbdbd"
+                keyboardType="email-address"
+                cursorColor="#bdbdbd"
+                selectionColor="#e6e6e6"
+                autoCapitalize="none"
+                autoComplete="email"
+                returnKeyType="next"
+                style={styles.emailInput}
+                value={loginFormState.email}
+                onChangeText={email =>
+                  setLoginFormState(prevState => ({ ...prevState, email }))
+                }
+                onFocus={onEmailFocus}
+                onBlur={onEmailBlur}
+                onSubmitEditing={onEmailSubmit}
+              />
+            </Animated.View>
+
+            <Animated.View style={styles.passwordInputContainer}>
+              <TextInput
+                ref={passwordField}
+                placeholder={isPasswordFocused ? null : 'Password'}
+                placeholderTextColor="#bdbdbd"
+                secureTextEntry={isPasswordHide}
+                keyboardType={Platform.select({
+                  android: isPasswordHide ? 'default' : 'visible-password',
+                  ios: isPasswordHide ? 'default' : 'ascii-capable',
+                })}
+                cursorColor="#bdbdbd"
+                selectionColor="#e6e6e6"
+                autoCapitalize="none"
+                returnKeyType="go"
+                style={styles.passwordInput}
+                value={loginFormState.password}
+                onChangeText={password =>
+                  setLoginFormState(prevState => ({ ...prevState, password }))
+                }
+                onFocus={onPasswordFocus}
+                onBlur={onPasswordBlur}
+                onSubmitEditing={onPasswordSubmit}
+              />
+
+              <TouchableOpacity
+                style={styles.passwordTypeSwitch}
+                activeOpacity={0.2}
+                onPress={() => setIsPasswordHide(prevState => !prevState)}
+              >
+                {isPasswordHide ? (
+                  <FontAwesomeIcon size={32} color="#bdbdbd" icon={faEye} />
+                ) : (
+                  <FontAwesomeIcon
+                    size={32}
+                    color="#bdbdbd"
+                    icon={faEyeSlash}
+                  />
+                )}
+              </TouchableOpacity>
+            </Animated.View>
+          </KeyboardAvoidingView>
+
+          {!isKeyboardShown && (
+            <View style={styles.controlsContainer}>
+              <TouchableOpacity
+                style={styles.loginButton}
+                activeOpacity={0.7}
+                onPress={onFormSubmit}
+              >
+                <View pointerEvents="none">
+                  <Text style={styles.loginButtonText}>Login</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.registerButton}
+                activeOpacity={0.6}
+                onPress={onRegisterPress}
+              >
+                <Text style={styles.registerButtonText}>
+                  Register, if you haven't yet.
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      </ImageBackground>
+    </TouchableWithoutFeedback>
   );
 };
