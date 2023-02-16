@@ -28,6 +28,10 @@ export const LoginLayout = () => {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isPasswordHide, setIsPasswordHide] = useState(true);
 
+  const onEmailSubmit = () => {
+    setTimeout(() => passwordField.current.focus(), 100);
+  };
+
   const onEmailFocus = () => {
     emailForwardAnimation.start();
     setIsEmailFocused(true);
@@ -62,6 +66,7 @@ export const LoginLayout = () => {
             selectionColor="#e6e6e6"
             autoCapitalize="none"
             autoComplete="email"
+            returnKeyType="next"
             style={styles.emailInput}
             value={loginFormState.email}
             onChangeText={email =>
@@ -69,7 +74,7 @@ export const LoginLayout = () => {
             }
             onFocus={onEmailFocus}
             onBlur={onEmailBlur}
-            onSubmitEditing={() => passwordField.current.focus()}
+            onSubmitEditing={onEmailSubmit}
           />
         </Animated.View>
 
@@ -86,6 +91,7 @@ export const LoginLayout = () => {
             cursorColor="#bdbdbd"
             selectionColor="#e6e6e6"
             autoCapitalize="none"
+            returnKeyType="go"
             style={styles.passwordInput}
             value={loginFormState.password}
             onChangeText={password =>
