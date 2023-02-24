@@ -1,32 +1,23 @@
+import { useEffect } from 'react';
 import { Animated, Image, TouchableOpacity, View } from 'react-native';
+import { launchImageLibraryAsync, launchCameraAsync } from 'expo-image-picker';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
-import * as ImagePicker from 'expo-image-picker';
-import { styles } from './styles';
+import { IMAGE_PICKER_OPTIONS } from '~/constants/imagePickerOptions';
 import { badgeBackwardAnimation, badgeForwardAnimation } from './animations';
-import { useEffect } from 'react';
+import { styles } from './styles';
 
 export const RegisterImagePicker = ({ imageUri, setImageUri }) => {
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+  const addImage = async variant => {
+    let result = null;
 
-    if (!result || result.canceled) return;
+    if (variant === 'camera') {
+      result = await launchCameraAsync(IMAGE_PICKER_OPTIONS);
+    }
 
-    setImageUri(result.assets[0].uri);
-  };
-
-  const takePhoto = async () => {
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+    if (variant === 'file') {
+      result = await launchImageLibraryAsync(IMAGE_PICKER_OPTIONS);
+    }
 
     if (!result || result.canceled) return;
 
@@ -34,7 +25,7 @@ export const RegisterImagePicker = ({ imageUri, setImageUri }) => {
   };
 
   const onImagePress = () => {
-    if (!imageUri) takePhoto();
+    if (!imageUri) addImage('camera');
     if (imageUri) setImageUri(null);
   };
 
